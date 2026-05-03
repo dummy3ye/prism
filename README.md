@@ -1,0 +1,1 @@
+<img src="https://github.com/dummy3ye/rosevim/blob/master/assets/rosevim.png" alt ="main image">
