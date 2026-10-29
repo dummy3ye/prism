@@ -1,0 +1,18 @@
+return {
+  background   = "#10131c",
+  surface      = "#10131c",
+  surfaceLow   = "#181b25",
+  surfaceC     = "#1c1f29",
+  surfaceHigh  = "#272a34",
+  surfaceTop   = "#32343f",
+  text         = "#e0e2ef",
+  textVar      = "#c4c6d3",
+  textPrimary  = "#002b74",
+  primary      = "#b2c5ff",
+  primaryC     = "#003fa3",
+  secondary    = "#c4c3ea",
+  tertiary     = "#d0bdf6",
+  outline      = "#8e909c",
+  outlineVar   = "#444651",
+  error        = "#ffb4ab",
+}
