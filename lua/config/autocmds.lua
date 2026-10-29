@@ -32,4 +32,31 @@ vim.api.nvim_create_autocmd("DirChanged", {
   end,
 })
 
+vim.opt.autoread = true
+
+local function watch_files()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "" then
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name and name ~= "" then
+        local stat = vim.loop.fs_stat(name)
+        local modsave = vim.bo[buf].modified
+        if stat and stat.mtime and stat.mtime.sec then
+          local file_mtime = stat.mtime.sec * 1e6 + (stat.mtime.nsec or 0) / 1000
+          local now = os.time() * 1e6
+          if file_mtime <= now and not modsave then
+            pcall(vim.cmd, "silent! edit! " .. vim.fn.fnameescape(name))
+          end
+        end
+      end
+    end
+  end
+end
+
+local timer = vim.loop.new_timer()
+if timer then
+  timer:start(500, 500, vim.schedule_wrap(function() watch_files() end))
+end
+
 apply_transparency()
+
