@@ -5,13 +5,6 @@ return {
     config = function()
         local dashboard = require("alpha.themes.dashboard")
 
-        -- Define color groups once (used by programmatic highlight)
-        vim.api.nvim_set_hl(0, "AlphaA", { fg = "#a6e3a1" })
-        vim.api.nvim_set_hl(0, "AlphaB", { fg = "#89b4fa" })
-        vim.api.nvim_set_hl(0, "AlphaC", { fg = "#f38ba8" })
-        vim.api.nvim_set_hl(0, "AlphaD", { fg = "#cba6f7" })
-        vim.api.nvim_set_hl(0, "AlphaE", { fg = "#f9e2af" })
-
         local function colorize(lines, groups)
             local hl = {}
             for i, line in ipairs(lines) do
@@ -31,25 +24,6 @@ return {
             return hl
         end
 
-        -- Dashboard header (new figlet)
-        local logo = {
-            [[██▀███   ▒█████    ██████ ▓█████ ██▒   █▓ ██▓ ███▄ ▄███▓]],
-            [[▓██ ▒ ██▒▒██▒  ██▒▒██    ▒ ▓█   ▀▓██░   █▒▓██▒▓██▒▀█▀ ██▒]],
-            [[▓██ ░▄█ ▒▒██░  ██▒░ ▓██▄   ▒███   ▓██  █▒░▒██▒▓██    ▓██░]],
-            [[▒██▀▀█▄  ▒██   ██░  ▒   ██▒▒▓█  ▄  ▒██ █░░░██░▒██    ▒██ ]],
-            [[░██▓ ▒██▒░ ████▓▒░▒██████▒▒░▒████▒  ▒▀█░  ░██░▒██▒   ░██▒]],
-            [[░ ▒▓ ░▒▓░░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░░ ▒░ ░  ░ ▐░  ░▓  ░ ▒░   ░  ░]],
-            [[░▒ ░ ▒░  ░ ▒ ▒░ ░ ░▒  ░ ░ ░ ░  ░  ░ ░░   ▒ ░░      ░   ]],
-            [[░         ░ ░        ░     ░  ░     ░   ░         ░   ]],
-            [[                                                 ░ ]],
-        }
-
-        dashboard.section.header.val = logo
-        dashboard.section.header.opts.hl = colorize(logo, {
-            "AlphaA", "AlphaB", "AlphaC", "AlphaD", "AlphaE",
-        })
-
-        -- Refresh palette when colorscheme changes (optional)
         local function refresh_alpha_palette()
             vim.api.nvim_set_hl(0, "AlphaA", { fg = "#a6e3a1" })
             vim.api.nvim_set_hl(0, "AlphaB", { fg = "#89b4fa" })
@@ -58,6 +32,24 @@ return {
             vim.api.nvim_set_hl(0, "AlphaE", { fg = "#f9e2af" })
             pcall(vim.cmd, "AlphaRedraw")
         end
+
+        -- Dashboard header (new figlet)
+        local logo = {
+            [[██▀███   ▒█████    ██████ ▓█████ ██▒   █▓ ██▓ ███▄ ▄███▓]],
+            [[           ▓██ ▒ ██▒▒██▒  ██▒▒██    ▒ ▓█   ▀▓██░   █▒▓██▒▓██▒▀█▀ ██▒]],
+            [[           ▓██ ░▄█ ▒▒██░  ██▒░ ▓██▄   ▒███   ▓██  █▒░▒██▒▓██    ▓██░]],
+            [[           ▒██▀▀█▄  ▒██   ██░  ▒   ██▒▒▓█  ▄  ▒██ █░░░██░▒██    ▒██ ]],
+            [[           ░██▓ ▒██▒░ ████▓▒░▒██████▒▒░▒████▒  ▒▀█░  ░██░▒██▒   ░██▒]],
+            [[           ░ ▒▓ ░▒▓░░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░░ ▒░ ░  ░ ▐░  ░▓  ░ ▒░   ░  ░]],
+            [[             ░▒ ░ ▒░  ░ ▒ ▒░ ░ ░▒  ░ ░ ░ ░  ░  ░ ░░   ▒ ░░      ░   ]],
+            [[              ░         ░ ░        ░     ░  ░     ░   ░         ░   ]],
+            [[                                                 ░ ]],
+        }
+
+        dashboard.section.header.val = logo
+        dashboard.section.header.opts.hl = colorize(logo, {
+            "AlphaA", "AlphaB", "AlphaC", "AlphaD", "AlphaE",
+        })
 
         -- Dashboard buttons
         dashboard.section.buttons.val = {
@@ -73,26 +65,7 @@ return {
 
         dashboard.section.footer.val = { "", "" }
 
-        -- Finally setup Alpha
-        require("alpha").setup({
-            layout = {
-                { type = "padding", val = 6 },
-                dashboard.section.header,
-                { type = "padding", val = 2 },
-                dashboard.section.buttons,
-                { type = "padding", val = 1 },
-                dashboard.section.footer,
-            },
-            opts = {
-                margin = 5,
-                setup = function()
-                    vim.api.nvim_create_autocmd("ColorScheme", {
-                        group = vim.api.nvim_create_augroup("alpha-theme-palette", { clear = true }),
-                        callback = refresh_alpha_palette,
-                    })
-                end,
-            },
-        })
+        require("alpha").setup(dashboard.opts)
 
         vim.api.nvim_create_autocmd("ColorScheme", {
             group = vim.api.nvim_create_augroup("alpha-theme-palette", { clear = true }),
