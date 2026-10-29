@@ -1,17 +1,9 @@
--- Transparency Fix: Ensures background stays transparent across different UI events
-local function apply_transparency()
-    local groups = {
-        "Normal", "NormalNC", "LineNr", "NonText", "EndOfBuffer", 
-        "SignColumn", "VertSplit", "WinSeparator"
-    }
-    for _, group in ipairs(groups) do
-        vim.api.nvim_set_hl(0, group, { bg = "NONE", ctermbg = "NONE" })
-    end
+-- Transparency is owned by lua/transparency.lua (loaded from init.lua), which
+-- covers far more groups than the eight this used to clear. Calling into it
+-- here keeps BufEnter-based re-application without duplicating the group list.
+local apply_transparency = function()
+  require("transparency").apply()
 end
-
-vim.api.nvim_create_autocmd({"VimEnter", "ColorScheme", "BufEnter"}, {
-    callback = apply_transparency,
-})
 
 -- Neovim 0.11 compatibility shim for Treesitter
 if vim.treesitter.language.get_lang and not vim.treesitter.language.ft_to_lang then
@@ -31,7 +23,12 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("DirChanged", {
   pattern = "global",
   callback = function()
-    require("neo-tree.command").execute({ action = "focus", dir = vim.fn.getcwd() })
+    -- pcall because this fires on every directory change, including before
+    -- neo-tree has finished loading. An unguarded require here throws a
+    -- "module not found" error into the message area.
+    pcall(function()
+      require("neo-tree.command").execute({ action = "focus", dir = vim.fn.getcwd() })
+    end)
   end,
 })
 

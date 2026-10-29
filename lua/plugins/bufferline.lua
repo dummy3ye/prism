@@ -4,6 +4,8 @@ return {
     version = "*",
     dependencies = 'nvim-tree/nvim-web-devicons',
     lazy = false,
+    -- Reference layout has no bufferline; see lua/plugins/dynamic.lua.
+    enabled = false,
     opts = {
       options = {
         mode = "buffers",
