@@ -24,7 +24,7 @@ jobs:
       - name: Luacheck / Syntax validation
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq luajit
-          find . -name "*.lua" -exec luajit -bl {} + 2>/dev/null || find . -name "*.lua" -exec luac -p {} +
+          find . -name "*.lua" | while read f; do luajit -bl "$f" || exit 1; done
 
       - name: Bootstrap lazy.nvim
         run: |
