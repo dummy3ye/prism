@@ -11,6 +11,8 @@
 --
 -- Only genuinely additional bindings live here now.
 
+vim.keymap.set("n", "<C-`>", "<cmd>ToggleTerm float<CR>", { desc = "Toggle floating terminal" })
+
 -- ---------------------------------------------------------------------------
 -- Editor-common control keys, all hitting the real system clipboard
 -- ---------------------------------------------------------------------------
