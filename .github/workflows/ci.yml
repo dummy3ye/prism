@@ -23,8 +23,15 @@ jobs:
 
       - name: Luacheck / Syntax validation
         run: |
-          find . -name "*.lua" -exec luac -p {} +
+          sudo apt-get update -qq && sudo apt-get install -y -qq luajit
+          find . -name "*.lua" -exec luajit -bl {} + 2>/dev/null || find . -name "*.lua" -exec luac -p {} +
+
+      - name: Bootstrap lazy.nvim
+        run: |
+          LAZY=${{ env.HOME || '$HOME' }}/.local/share/nvim/lazy/lazy.nvim
+          mkdir -p $(dirname $LAZY)
+          [ -d "$LAZY" ] || git clone --filter=blob:none --branch=stable https://github.com/folke/lazy.nvim.git "$LAZY"
 
       - name: Neovim Startup Check
         run: |
-          nvim --headless -c "lua require('lazy')" -c "checkhealth" -c "qa!"
+          nvim --headless -c "lua require('lazy').setup()" -c "lua require('lazy').sync()" -c "checkhealth" -c "qa!"
