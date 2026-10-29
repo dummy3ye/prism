@@ -7,7 +7,7 @@ return {
 
         local function colorize(lines, groups)
             local hl = {}
-            for i, line in ipairs(lines) do
+            for _, line in ipairs(lines) do
                 local row = {}
                 local len = #line
                 local n = #groups
