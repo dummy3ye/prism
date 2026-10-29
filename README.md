@@ -10,7 +10,7 @@ a pretty cool neovim configuration
   into editor highlights, and the accent colours are re-derived per wallpaper
   rather than hardcoded.
 - **15 palettes**, switchable at runtime without restarting.
-- **Documented keybinds.** [`keybinds.md`](keybinds.md)
+- **Documented keybinds.** [`keybinds.md`](docs/keybinds.md)
 
 ## Requirements
 
@@ -76,7 +76,7 @@ startup, so theme choice survives restarts.
 
 ## Keybinds
 
-[`keybinds.md`](keybinds.md) — leader groups, editing, LSP, LaTeX, themes and
+[`keybinds.md`](docs/keybinds.md) — leader groups, editing, LSP, LaTeX, themes and
 the built-in defaults this config inherits.
 
 ## Licence
